@@ -11,7 +11,9 @@ make
 ```
 
 # File structure
-*include - Contains all *.h files
-*source - Contains all *.cpp files 
-*object - Contains compiled obj code; makefile outputs here
-*sqlite - Contains sqlite amalgamation files for compiling the sqlite library needed
+<ul>
+<li>/include - Contains all *.h files</li>
+<li>/source - Contains all *.cpp files</li>
+<li>/object - Contains compiled obj code; makefile outputs here</li>
+<li>/sqlite - Contains sqlite amalgamation files for compiling the sqlite library needed</li>
+</ul>
