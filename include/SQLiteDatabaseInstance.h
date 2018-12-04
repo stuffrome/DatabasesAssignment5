@@ -12,10 +12,9 @@ class SQLiteDatabaseInstance {
 public:
 
 	SQLiteDatabaseInstance(std::string dbloc); // Takes in the local directory of the database file
-	~SQLiteDatabaseInstance();
+	~SQLiteDatabaseInstance(); // Closes the database instance
 
 	void run(std::string statement); // Will run a single SQLite statement
-	void close(); // Closes the database instance
 
 private:
 

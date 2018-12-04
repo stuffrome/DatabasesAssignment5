@@ -3,11 +3,12 @@
 SQLiteDatabaseInstance::SQLiteDatabaseInstance(std::string dbloc)
 {
 	sqlite3_open(dbloc.c_str(), &db);
+	errorMessage = nullptr;
 }
 
 SQLiteDatabaseInstance::~SQLiteDatabaseInstance()
 {
-
+	sqlite3_close(db);
 }
 
 void SQLiteDatabaseInstance::run(std::string statement)
