@@ -7,6 +7,36 @@ using namespace std;
 int main()
 {
 	SQLiteDatabaseInstance sql = SQLiteDatabaseInstance("flowers.db");
+
+	// START DATABASE SCHEMA ALTERATIONS
+	
+	 /* 
+	 * Added ON UPDATE CASCADE ON DELETE SET NULL to the foreign key
+	 * constraints on SIGHTINGS to have it be automatically updated 
+	 * when the changes a flower's information.
+	 */
+	sql.run("	PRAGMA foreign_keys=off;
+
+				ALTER TABLE SIGHTINGS RENAME TO _SIGHTINGS_OLD;
+
+				CREATE TABLE SIGHTINGS (
+					NAME	VARCHAR ( 30 ),
+					PERSON	VARCHAR ( 30 ),
+					LOCATION	VARCHAR ( 30 ),
+					SIGHTED	DATE,
+					CONSTRAINT sightings_pk PRIMARY KEY(`NAME`,`PERSON`,`LOCATION`,`SIGHTED`),
+					CONSTRAINT fk1_sightings FOREIGN KEY(`NAME`) REFERENCES `FLOWERS`(`COMNAME`) ON UPDATE CASCADE ON DELETE SET NULL,
+					CONSTRAINT fk2_sightings FOREIGN KEY(`LOCATION`) REFERENCES `FEATURES`(`LOCATION`) ON UPDATE CASCADE ON DELETE SET NULL
+				);
+
+				INSERT INTO SIGHTINGS SELECT * FROM _SIGHTINGS_OLD;
+
+				DROP TABLE _SIGHTINGS_OLD;
+
+				PRAGMA foreign_keys=on;");
+
+	// END DATABASE SCHEMA ALTERATIONS
+
 	int userInt;
     string userFlower;
     string newName;
