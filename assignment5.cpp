@@ -39,7 +39,7 @@ int main()
 
 	// END DATABASE SCHEMA ALTERATIONS
 
-	int userInt;
+	string userInt;
     string userFlower;
     string newName;
     string spotter;
@@ -50,11 +50,12 @@ int main()
 	    cout<<"FUNCTIONS:\n1. Query\tDisplay the 10 most recent sightings of a flower\n2. Update\tUpdate the information of a flower\n3. Insert\tAdd a new sighting of a flower\n4. Quit"<<endl;
 	    cout<<"Input an Integer (1, 2, 3, or 4): ";
 
+
 	    cin >> userInt;
 
 	    // Query
 
-	    if (userInt == 1)
+	    if (userInt == "1")
 	    {
 	        sql.run("SELECT COMNAME FROM FLOWERS;");
 
@@ -70,7 +71,7 @@ int main()
 
 	    // Update
 
-	    if (userInt == 2)
+	    if (userInt == "2")
 	    {
 	        sql.run("SELECT COMNAME FROM FLOWERS;");
 
@@ -101,7 +102,7 @@ int main()
 
 	    // Insert
 
-	    if (userInt == 3)
+	    if (userInt == "3")
 	    {
 	    	cout<<"Please enter the name of the flower being inserted: ";
 
@@ -122,7 +123,7 @@ int main()
 
 	        sql.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');", false);
 	    }
-	} while (userInt != 4);
+	} while (userInt != "4");
 
 	return 0;
 }
