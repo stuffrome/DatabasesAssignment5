@@ -83,19 +83,19 @@ int main()
 
 	        getline(cin, newName);
 
-	        sql.run("UPDATE FLOWERS SET GENUS = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
+	        sql.run("UPDATE FLOWERS SET GENUS = '" + newName + "' WHERE COMNAME = '" + userFlower + "';", false);
 
 	        cout<<"Please enter the new species of the flower: ";
 
 	        getline(cin, newName);
 
-	        sql.run("UPDATE FLOWERS SET SPECIES = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
+	        sql.run("UPDATE FLOWERS SET SPECIES = '" + newName + "' WHERE COMNAME = '" + userFlower + "';", false);
 
 	        cout<<"Please enter the new common name for the flower: ";
 
 	        getline(cin, newName);
 
-	        sql.run("UPDATE FLOWERS SET COMNAME = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
+	        sql.run("UPDATE FLOWERS SET COMNAME = '" + newName + "' WHERE COMNAME = '" + userFlower + "';", false);
 
 	    }
 
@@ -120,7 +120,7 @@ int main()
 
 	        getline(cin, date);
 
-	        sql.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');");
+	        sql.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');", false);
 	    }
 	} while (userInt != 4);
 
