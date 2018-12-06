@@ -2,6 +2,7 @@
 #define SQLITEDATABASEINSTANCE_H
 
 #include <iostream>
+#include <iomanip>
 #include <stdio.h>
 #include <sqlite3.h>
 #include <string>
@@ -14,14 +15,14 @@ public:
 	SQLiteDatabaseInstance(std::string dbloc); // Takes in the local directory of the database file
 	~SQLiteDatabaseInstance(); // Closes the database instance
 
-	void run(std::string statement); // Will run a single SQLite statement
+	void run(std::string statement, bool withOutput = true); // Will run a single SQLite statement
 
 private:
 
 	sqlite3* db;
 	char* errorMessage;
 
-	static int callback(void * empty, int argc, char **argv, char **colName);
+	void outputResult(sqlite3_stmt* stmt, int& returnCode);
 
 };
 

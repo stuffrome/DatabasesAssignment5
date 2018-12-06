@@ -20,6 +20,6 @@ $(SQL_DIR)/sqlite.o: $(SQL_DIR)/*.c
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CFLAGS) -o $@ -c $< $(INC)
 clean:
-	rm -rf $(TARGET) $(OBJ_DIR)/*.o $(SQL_DIR)/sqlite.o
+	rm -rf $(TARGET) $(OBJ_DIR)/*.o
 	
 .PHONY: all clean

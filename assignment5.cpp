@@ -4,17 +4,25 @@
 
 using namespace std;
 
+void clear()
+{
+	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
+
 int main()
 {
+	clear();
+
 	SQLiteDatabaseInstance sql = SQLiteDatabaseInstance("flowers.db");
 
 	// START DATABASE SCHEMA ALTERATIONS
 
-	 /* 
+	/* 
 	 * Added ON UPDATE CASCADE ON DELETE SET NULL to the foreign key
 	 * constraints on SIGHTINGS to have it be automatically updated 
 	 * when the changes a flower's information.
 	 *
+	 */
 	sql.run("PRAGMA foreign_keys=off;"
 			"ALTER TABLE SIGHTINGS RENAME TO _SIGHTINGS_OLD;"
 			"CREATE TABLE SIGHTINGS ("
@@ -27,8 +35,8 @@ int main()
 			"	CONSTRAINT fk2_sightings FOREIGN KEY(`LOCATION`) REFERENCES `FEATURES`(`LOCATION`) ON UPDATE CASCADE ON DELETE SET NULL);"
 			"INSERT INTO SIGHTINGS SELECT * FROM _SIGHTINGS_OLD;"
 			"DROP TABLE _SIGHTINGS_OLD;"
-			"PRAGMA foreign_keys=on;");
-*/
+			"PRAGMA foreign_keys=on;", false);
+
 	// END DATABASE SCHEMA ALTERATIONS
 
 	int userInt;
@@ -39,12 +47,13 @@ int main()
     string date;
 
     do {
-	    cout<<"1. Query\n2. Update\n3. Insert\n4. Quit"<<endl;
+	    cout<<"FUNCTIONS:\n1. Query\tDisplay the 10 most recent sightings of a flower\n2. Update\tUpdate the information of a flower\n3. Insert\tAdd a new sighting of a flower\n4. Quit"<<endl;
 	    cout<<"Input an Integer (1, 2, 3, or 4): ";
 
 	    cin >> userInt;
 
-	    //query
+	    // Query
+
 	    if (userInt == 1)
 	    {
 	        sql.run("SELECT COMNAME FROM FLOWERS;");
@@ -54,9 +63,13 @@ int main()
 	        cin.ignore();
 	        getline(cin, userFlower);
 
+	        clear();
+
 	        sql.run("SELECT PERSON, LOCATION, SIGHTED FROM SIGHTINGS WHERE NAME = '" + userFlower + "' ORDER BY SIGHTED DESC LIMIT 10;");
 	    }
-	    //update
+
+	    // Update
+
 	    if (userInt == 2)
 	    {
 	        sql.run("SELECT COMNAME FROM FLOWERS;");
@@ -83,10 +96,11 @@ int main()
 	        getline(cin, newName);
 
 	        sql.run("UPDATE FLOWERS SET COMNAME = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
-	        sql.run("UPDATE SIGHTINGS SET NAME = '" + newName + "' WHERE NAME = '" + userFlower + "';");
 
 	    }
-	    //insert
+
+	    // Insert
+
 	    if (userInt == 3)
 	    {
 	    	cout<<"Please enter the name of the flower being inserted: ";
@@ -107,9 +121,8 @@ int main()
 	        getline(cin, date);
 
 	        sql.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');");
-	        sql.run("INSERT INTO FLOWERS(COMNAME) VALUES('" + userFlower + "')");
-
 	    }
 	} while (userInt != 4);
+
 	return 0;
 }
