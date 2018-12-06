@@ -6,6 +6,94 @@ using namespace std;
 
 int main()
 {
-	cout << "Hello!";
+	SQLiteDatabaseInstance sql = SQLiteDatabaseInstance("flowers.db");
+	int userInt;
+    string userFlower;
+    string newName;
+    string spotter;
+    string location;
+    string date;
+
+    do {
+	    cout<<"1. Query\n2. Update\n3. Insert\n4. Quit"<<endl;
+	    cout<<"Input an Integer (1, 2, 3, or 4): ";
+
+	    cin >> userInt;
+
+	    //query
+	    if (userInt == 1)
+	    {
+	        sql.run("SELECT COMNAME FROM FLOWERS;");
+
+	        cout<<"Please enter the name of a flower: ";
+
+	        cin.ignore();
+	        getline(cin, userFlower);
+
+	        sql.run("SELECT PERSON, LOCATION, SIGHTED FROM SIGHTINGS WHERE NAME = '" + userFlower + "' ORDER BY SIGHTED DESC;");
+	        //TODO cut off after 10 sightings
+
+	    }
+	    //update
+	    if (userInt == 2)
+	    {
+	        sql.run("SELECT COMNAME FROM FLOWERS;");
+
+	        cout<<"Please enter the name of a flower to update: ";
+
+	        cin.ignore();
+	        getline(cin, userFlower);
+
+	        cout<<"Please enter the new genus of the flower: ";
+
+	        cin.ignore();
+	        getline(cin, newName);
+
+	        sql.run("UPDATE FLOWERS SET GENUS = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
+
+	        cout<<"Please enter the new species of the flower: ";
+
+	        cin.ignore();
+	        getline(cin, newName);
+
+	        sql.run("UPDATE FLOWERS SET SPECIES = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
+
+	        cout<<"Please enter the new common name for the flower: ";
+
+	        cin.ignore();
+	        getline(cin, newName);
+
+	        sql.run("UPDATE FLOWERS SET COMNAME = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
+	        //sql.run("UPDATE SIGHTINGS SET NAME = '" + newName + "' WHERE NAME = '" + userFlower + "';");
+	        sql.run("SELECT * FROM FLOWERS");
+
+	    }
+	    //insert
+	    if (userInt == 3)
+	    {
+	    	cout<<"Please enter the name of the flower being inserted: ";
+
+	        cin.ignore();
+	        getline(cin, userFlower);
+
+	        cout<<"Please enter the name of the person who spotted the flower: ";
+
+	        cin.ignore();
+	        getline(cin, spotter);
+
+	        cout<<"Please enter the location where the flower was spotted: ";
+
+	        cin.ignore();
+	        getline(cin, location);
+
+	        cout<<"Please enter the date the flower was spotted (yyyy-mm-dd): ";
+
+	        cin.ignore();
+	        getline(cin, date);
+
+	        sql.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');");
+
+	    }
+	} while (userInt != 4);
 	return 0;
 }
