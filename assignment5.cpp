@@ -14,7 +14,7 @@ int main()
 	 * Added ON UPDATE CASCADE ON DELETE SET NULL to the foreign key
 	 * constraints on SIGHTINGS to have it be automatically updated 
 	 * when the changes a flower's information.
-	 */
+	 *
 	sql.run("PRAGMA foreign_keys=off;"
 			"ALTER TABLE SIGHTINGS RENAME TO _SIGHTINGS_OLD;"
 			"CREATE TABLE SIGHTINGS ("
@@ -28,7 +28,7 @@ int main()
 			"INSERT INTO SIGHTINGS SELECT * FROM _SIGHTINGS_OLD;"
 			"DROP TABLE _SIGHTINGS_OLD;"
 			"PRAGMA foreign_keys=on;");
-
+*/
 	// END DATABASE SCHEMA ALTERATIONS
 
 	int userInt;
@@ -54,9 +54,7 @@ int main()
 	        cin.ignore();
 	        getline(cin, userFlower);
 
-	        sql.run("SELECT PERSON, LOCATION, SIGHTED FROM SIGHTINGS WHERE NAME = '" + userFlower + "' ORDER BY SIGHTED DESC;");
-	        //TODO cut off after 10 sightings
-
+	        sql.run("SELECT PERSON, LOCATION, SIGHTED FROM SIGHTINGS WHERE NAME = '" + userFlower + "' ORDER BY SIGHTED DESC LIMIT 10;");
 	    }
 	    //update
 	    if (userInt == 2)
@@ -70,26 +68,22 @@ int main()
 
 	        cout<<"Please enter the new genus of the flower: ";
 
-	        cin.ignore();
 	        getline(cin, newName);
 
 	        sql.run("UPDATE FLOWERS SET GENUS = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
 
 	        cout<<"Please enter the new species of the flower: ";
 
-	        cin.ignore();
 	        getline(cin, newName);
 
 	        sql.run("UPDATE FLOWERS SET SPECIES = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
 
 	        cout<<"Please enter the new common name for the flower: ";
 
-	        cin.ignore();
 	        getline(cin, newName);
 
 	        sql.run("UPDATE FLOWERS SET COMNAME = '" + newName + "' WHERE COMNAME = '" + userFlower + "';");
-	        //sql.run("UPDATE SIGHTINGS SET NAME = '" + newName + "' WHERE NAME = '" + userFlower + "';");
-	        sql.run("SELECT * FROM FLOWERS");
+	        sql.run("UPDATE SIGHTINGS SET NAME = '" + newName + "' WHERE NAME = '" + userFlower + "';");
 
 	    }
 	    //insert
@@ -97,25 +91,23 @@ int main()
 	    {
 	    	cout<<"Please enter the name of the flower being inserted: ";
 
-	        cin.ignore();
+	    	cin.ignore();
 	        getline(cin, userFlower);
 
 	        cout<<"Please enter the name of the person who spotted the flower: ";
 
-	        cin.ignore();
 	        getline(cin, spotter);
 
 	        cout<<"Please enter the location where the flower was spotted: ";
 
-	        cin.ignore();
 	        getline(cin, location);
 
 	        cout<<"Please enter the date the flower was spotted (yyyy-mm-dd): ";
 
-	        cin.ignore();
 	        getline(cin, date);
 
 	        sql.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');");
+	        sql.run("INSERT INTO FLOWERS(COMNAME) VALUES('" + userFlower + "')");
 
 	    }
 	} while (userInt != 4);
