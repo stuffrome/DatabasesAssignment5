@@ -16,11 +16,15 @@ public:
 	~SQLiteDatabaseInstance(); // Closes the database instance
 
 	void run(std::string statement, bool withOutput = true); // Will run a single SQLite statement
+	bool errorThrown();
+	bool emptyResult();
 
 private:
 
 	sqlite3* db;
 	char* errorMessage;
+	bool errorFlag;
+	bool emptyFlag;
 
 	void outputResult(sqlite3_stmt* stmt, int& returnCode);
 
