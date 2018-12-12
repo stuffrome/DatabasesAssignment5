@@ -80,8 +80,33 @@ bool UserInterface::runLogin()
 
 	    if (userInt == 2)
 	    {
-	       
+	    	bool validUsername = false;
 
+	    	while (!validUsername)
+	   		{
+	    		std::cout << "\nEnter a username: ";
+
+	        	std::cin >> username;
+
+	        	usersDB.run("SELECT * FROM ACCOUNTS WHERE USERNAME = '" + username + "';", false);
+
+	        	if (usersDB.emptyResult()) // Valid username
+	        	{
+	        		std::cout << "Enter a password: ";
+
+	        		std::cin >> password;
+
+	        		usersDB.run("INSERT INTO ACCOUNTS VALUES ('" + username + "', '" + password + "', date('now'));", false);
+
+	        		std::cout << "\nAccount created. Please login to access the database.\n";
+
+	        		validUsername = true;
+	        	}
+	        	else
+	        	{
+	        		std::cout << "\nUsername already in use. Choose a different username.\n";
+	        	}
+	    	}
 	    }
 
 	} while (userInt != 3);
