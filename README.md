@@ -12,6 +12,7 @@ make
 
 # File structure
 <ul>
+<li>/databases - Contains databases used in the program</li>
 <li>/include - Contains all *.h files</li>
 <li>/source - Contains all *.cpp files</li>
 <li>/object - Contains compiled obj code; makefile outputs here</li>
