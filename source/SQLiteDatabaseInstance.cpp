@@ -61,7 +61,9 @@ void SQLiteDatabaseInstance::outputResult(sqlite3_stmt* stmt, int& returnCode)
 	int colOutputWidth = 20;
 	std::string colOutputSpacer = "\t";
 
-	std::cout << "===== OUTPUT START =====" << std::endl;
+	std::cout << std::endl;
+
+	//std::cout << "===== OUTPUT START =====" << std::endl;
 
 	int colCount = sqlite3_column_count(stmt);
 
@@ -96,5 +98,6 @@ void SQLiteDatabaseInstance::outputResult(sqlite3_stmt* stmt, int& returnCode)
 
 	if (r == 0) {emptyFlag = true;}
 
-	std::cout << "===== OUTPUT END =====" << std::endl;
+	//std::cout << "===== OUTPUT END =====" << std::endl;
+	std::cout << std::endl;
 }

@@ -140,7 +140,7 @@ void UserInterface::runMenu()
 	        std::cin.ignore();
 	        getline(std::cin, userFlower);
 
-	        clear();
+	        //clear();
 
 	        flowersDB.run("SELECT PERSON, LOCATION, SIGHTED FROM SIGHTINGS WHERE NAME = '" + userFlower + "' ORDER BY SIGHTED DESC LIMIT 10;");
 	    }
