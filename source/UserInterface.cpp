@@ -17,25 +17,16 @@ UserInterface::~UserInterface()
 
 void UserInterface::alterFlowersDatabase()
 {
-	/* 
-	 * Added ON UPDATE CASCADE ON DELETE SET NULL to the foreign key
-	 * constraints on SIGHTINGS to have it be automatically updated 
-	 * when the changes a flower's information.
-	 *
-	 */
-	flowersDB.run("PRAGMA foreign_keys=off;"
-			"ALTER TABLE SIGHTINGS RENAME TO _SIGHTINGS_OLD;"
-			"CREATE TABLE SIGHTINGS ("
-			"	NAME	VARCHAR ( 30 ),"
-			"	PERSON	VARCHAR ( 30 ),"
-			"	LOCATION	VARCHAR ( 30 ),"
-			"	SIGHTED	DATE,"
-			"	CONSTRAINT sightings_pk PRIMARY KEY(`NAME`,`PERSON`,`LOCATION`,`SIGHTED`),"
-			"	CONSTRAINT fk1_sightings FOREIGN KEY(`NAME`) REFERENCES `FLOWERS`(`COMNAME`) ON UPDATE CASCADE ON DELETE SET NULL,"
-			"	CONSTRAINT fk2_sightings FOREIGN KEY(`LOCATION`) REFERENCES `FEATURES`(`LOCATION`) ON UPDATE CASCADE ON DELETE SET NULL);"
-			"INSERT INTO SIGHTINGS SELECT * FROM _SIGHTINGS_OLD;"
-			"DROP TABLE _SIGHTINGS_OLD;"
-			"PRAGMA foreign_keys=on;", false);
+	// Trigger for changing SIGHTING names after a FLOWER name update
+	flowersDB.run("CREATE TRIGGER NAMECHANGE AFTER UPDATE OF COMNAME ON FLOWERS BEGIN UPDATE SIGHTINGS SET NAME = NEW.COMNAME WHERE NAME = OLD.COMNAME; END;", false, false);
+
+	// Trigger for creating an empty LOCATION for new SIGHTINGS
+	flowersDB.run("CREATE TRIGGER NEWLOC AFTER INSERT ON SIGHTINGS"
+				  "WHEN NEW.LOCATION NOT IN ( SELECT LOCATION FROM FEATURES )"
+				  "BEGIN"
+				  "INSERT INTO FEATURES"
+				  "VALUES ( NEW.LOCATION, NULL, NULL, NULL, NULL, NULL);"
+				  "END;", false, false);
 }
 
 bool UserInterface::runLogin()
@@ -198,6 +189,11 @@ void UserInterface::runMenu()
 	        getline(std::cin, date);
 
 	        flowersDB.run("INSERT INTO SIGHTINGS VALUES('" + userFlower + "', '" + spotter + "', '" + location + "', '" + date + "');", false);
+
+	        if (flowersDB.errorThrown())
+	        {
+	        	std::cout << "\nCould not create new SIGHTING. Either the flower does not exist, or an invalid date was entered.\n";
+	        }
 	    }
 	} while (userInt != 4);
 }

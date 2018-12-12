@@ -15,7 +15,7 @@ public:
 	SQLiteDatabaseInstance(std::string dbloc); // Takes in the local directory of the database file
 	~SQLiteDatabaseInstance(); // Closes the database instance
 
-	void run(std::string statement, bool withOutput = true); // Will run a single SQLite statement
+	void run(std::string statement, bool outputResult = true, bool outputErrors = true); // Will run a single SQLite statement
 	bool errorThrown();
 	bool emptyResult();
 
@@ -26,7 +26,7 @@ private:
 	bool errorFlag;
 	bool emptyFlag;
 
-	void outputResult(sqlite3_stmt* stmt, int& returnCode);
+	void outputRows(sqlite3_stmt* stmt, int& returnCode);
 
 };
 

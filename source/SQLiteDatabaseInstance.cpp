@@ -22,7 +22,7 @@ bool SQLiteDatabaseInstance::emptyResult()
 	return emptyFlag;
 }
 
-void SQLiteDatabaseInstance::run(std::string statement, bool withOutput)
+void SQLiteDatabaseInstance::run(std::string statement, bool outputResult, bool outputError)
 {
 	sqlite3_stmt* stmt;
 	const char* c_stmt = statement.c_str();
@@ -33,13 +33,13 @@ void SQLiteDatabaseInstance::run(std::string statement, bool withOutput)
 
 	if (returnCode != SQLITE_OK) {
 		errorFlag = true;
-	    std::cout << "Error: " << sqlite3_errmsg(db) << '\n';
+	    if (outputError) {std::cout << "Error: " << sqlite3_errmsg(db) << '\n';}
 	    return;
 	}
 
-	if (withOutput)
+	if (outputResult)
 	{
-		outputResult(stmt,returnCode);
+		outputRows(stmt,returnCode);
 	}
 	else
 	{
@@ -50,13 +50,13 @@ void SQLiteDatabaseInstance::run(std::string statement, bool withOutput)
 
 	if (returnCode != SQLITE_DONE) {
 		errorFlag = true;
-	    std::cout << "Error: " << sqlite3_errmsg(db);
+	    if (outputError) {std::cout << "Error: " << sqlite3_errmsg(db);}
 	}
 
 	sqlite3_finalize(stmt);
 }
 
-void SQLiteDatabaseInstance::outputResult(sqlite3_stmt* stmt, int& returnCode)
+void SQLiteDatabaseInstance::outputRows(sqlite3_stmt* stmt, int& returnCode)
 {
 	int colOutputWidth = 20;
 	std::string colOutputSpacer = "\t";
